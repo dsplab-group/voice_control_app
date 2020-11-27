@@ -7,8 +7,6 @@ from util import cut_audio, save_img_from_audio, butter_lowpass, save_wave_file
 from scipy.signal import lfilter
 import numpy as np
 
-
-
 target_dict = {
     '0': '0',
     '1': '1',
@@ -44,14 +42,11 @@ if not os.path.exists(PNG_OUTPUT_DIR):
 if not os.path.exists(WAV_OUTPUT_DIR):
     os.mkdir(WAV_OUTPUT_DIR)
 
-
 for class_name in target_dict.values():
     if not os.path.exists(os.path.join(PNG_OUTPUT_DIR, f'class_{class_name}')):
         os.mkdir(os.path.join(PNG_OUTPUT_DIR, f'class_{class_name}'))
     if not os.path.exists(os.path.join(WAV_OUTPUT_DIR, f'class_{class_name}')):
         os.mkdir(os.path.join(WAV_OUTPUT_DIR, f'class_{class_name}'))
-
-    
 
 recording = False
 detected = False
@@ -116,14 +111,13 @@ while True:
             stream.stop_stream()
             print('Complete: ', char)
 
-            audio_sequence = np.hstack(block_buffer)
-            
+            audio_sequence = np.hstack(block_buffer)            
             audio_sequence = cut_audio(audio_sequence)
+
             if _USE_FILTER:
                 audio_sequence = lfilter(b, a, audio_sequence)
 
             block_buffer = []
-
             output_class_dir = os.path.join(PNG_OUTPUT_DIR, f'class_{target_dict[char]}')
             
             fId = 0
@@ -141,13 +135,9 @@ while True:
             save_path = output_class_dir + '/' + f'{pLabel}{target_dict[char]}_{fId}.wav'
             save_wave_file(audio_sequence, save_path)
             
-
-            
             print('Saved')
 
             break
-
-
 
 print('Thank you for recording!')
 
