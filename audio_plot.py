@@ -42,4 +42,4 @@ if wf:
 
     plt.show()
 
-
+wf.close()
