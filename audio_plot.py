@@ -41,5 +41,5 @@ if wf:
     plt.plot(input_tuple)
 
     plt.show()
-
-wf.close()
+    
+    wf.close()
