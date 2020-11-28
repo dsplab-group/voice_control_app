@@ -68,6 +68,15 @@ def callback(in_data, frame_count, time_info, flag):
         block_buffer.append(signal_block)
 
     return(signal_block, pyaudio.paContinue)
+    
+print('You can enter following char: ')
+for (k, v) in target_dict.items():
+    print(k, '=======>', v)
+
+print('Press q to quit')
+
+if _USE_FILTER:
+    b, a = butter_lowpass()
 
 p = pyaudio.PyAudio()
 PA_FORMAT = p.get_format_from_width(_AUDIO_DATA_WIDTH)
@@ -79,15 +88,6 @@ stream = p.open(
     output = False,
     stream_callback=callback,
     frames_per_buffer=_BLOCKLEN)
-    
-print('You can enter following char: ')
-for (k, v) in target_dict.items():
-    print(k, '=======>', v)
-
-print('Press q to quit')
-
-if _USE_FILTER:
-    b, a = butter_lowpass()
 
 while True:
 
