@@ -27,15 +27,10 @@ image_saved_count = 0
 
 MODEL_TPYE = 'SVM'
 
-cnn_weight_save_path = 'models/model2_checkpoint'
-svm_model_path = 'models/svm_mfcc_model'
+svm_model_path = 'models/svm_mfcc_data_aug_model'
 test_data = 'test_data/'
 
-"""
-if MODEL_TPYE == 'CNN':
-    my_model = get_model(n_class=10)
-    my_model.load_weights(cnn_weight_save_path)
-"""
+
 if MODEL_TPYE == 'SVM':
     my_model = joblib.load(svm_model_path)
 block_buffer = []
