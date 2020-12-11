@@ -152,6 +152,7 @@ def data_matrix_from_path(path='sample_data/', Transfer=False):
 def audio_interp(audio, length=_AUDIO_LENGTH):
     xp = [i for i in range(audio.shape[0])]
     x = [i * audio.shape[0] / length for  i in range(length)]
+    print(len(audio))
 
     return np.interp(x, xp, audio)
 
@@ -181,7 +182,3 @@ def mfcc_data_matrix_from_path(path='audio_data/', data_aug=False):
     y = np.hstack(y)
 
     return X, y
-
-
-
- 

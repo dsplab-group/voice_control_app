@@ -48,7 +48,7 @@ def callback(in_data, frame_count, time_info, flag):
     global block_buffer, detected, recording
     signal_block = np.frombuffer(in_data, dtype=np.int16)
 
-
+    signal_block = signal_block.astype(np.int32)
     audio_valid = (np.max(signal_block) - np.min(signal_block)) > _AUDIO_VALID_THRESHOLD
 
     
