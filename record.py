@@ -7,8 +7,8 @@ from util import cut_audio, save_img_from_audio, butter_lowpass, save_wave_file
 from scipy.signal import lfilter
 import numpy as np
 
+
 target_dict = {
-    '0': '0',
     '1': '1',
     '2': '2',      
     '3': '3',      
@@ -17,10 +17,10 @@ target_dict = {
     '6': '6',
     '7': '7',
     '8': '8',
-    '9': '9',
     'g': 'guitar',
     'p': 'piano'
 }
+
 
 print('Please enter the png file dictionary (Default: sample_data/): ')
 PNG_OUTPUT_DIR = input()
@@ -55,9 +55,10 @@ block_buffer= []
 def callback(in_data, frame_count, time_info, flag):
     global block_buffer, detected, recording
     signal_block = np.frombuffer(in_data, dtype=np.int16)
-
     # Record if the value is greater the what we defined
-    audio_valid = np.max(signal_block) - np.min(signal_block) > _AUDIO_VALID_THRESHOLD
+    audio_valid = (np.max(signal_block)-np.min(signal_block)) > _AUDIO_VALID_THRESHOLD
+
+    
     
     if not detected and audio_valid:
         detected = True
@@ -140,5 +141,3 @@ while True:
             break
 
 print('Thank you for recording!')
-
-
