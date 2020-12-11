@@ -11,7 +11,7 @@ import scipy.io.wavfile as wav
 
 from mfcc import mfcc_feature_pyramid
 
-from config import _IMAGE_HEIGHT, _IMAGE_WIDTH, _IMAGE_CHANNELS, _AUDIIO_CUT_THRESHOLD, _AUDIO_CHANNELS, _AUDIO_FRAME_RATE, _AUDIO_DATA_WIDTH, _EXTEND_NUM, _FILTER_ORDER, _LOW_PASS_CUTOFF, _SVM_IMAGE_HEIGHT, _SVM_IMAGE_WIDTH, _AUDIO_LENGTH
+from config import _IMAGE_HEIGHT, _IMAGE_WIDTH, _IMAGE_CHANNELS, _AUDIIO_CUT_THRESHOLD, _AUDIO_CHANNELS, _AUDIO_FRAME_RATE, _AUDIO_DATA_WIDTH, _EXTEND_NUM, _FILTER_ORDER, _LOW_PASS_CUTOFF, _SVM_IMAGE_HEIGHT, _SVM_IMAGE_WIDTH, _AUDIO_LENGTH, _AUDIO_DATA_MAX
 
 def get_wav_info(wav_file):
     wav = wave.open(wav_file, 'r')
@@ -107,6 +107,8 @@ def save_wave_file(audio_data, path):
     wf.setsampwidth(_AUDIO_DATA_WIDTH)
     wf.setframerate(_AUDIO_FRAME_RATE)
 
+    audio_data = np.clip(audio_data, - _AUDIO_DATA_MAX, _AUDIO_DATA_MAX)
+
     
 
     byte_string = struct.pack('h'*audio_data.shape[0], *audio_data)
@@ -152,7 +154,6 @@ def data_matrix_from_path(path='sample_data/', Transfer=False):
 def audio_interp(audio, length=_AUDIO_LENGTH):
     xp = [i for i in range(audio.shape[0])]
     x = [i * audio.shape[0] / length for  i in range(length)]
-    print(len(audio))
 
     return np.interp(x, xp, audio)
 
