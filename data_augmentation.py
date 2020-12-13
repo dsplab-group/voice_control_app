@@ -9,7 +9,7 @@ from util import save_wave_file
 def _add_noise(audio, noise_factor=0):
 
     if noise_factor == 0:
-        noise_factor = (np.max(audio) - np.min(audio)) / 20
+        noise_factor = (np.max(audio)/20 - np.min(audio)/20)
     
     return audio + noise_factor * np.random.randn(audio.shape[0])
 

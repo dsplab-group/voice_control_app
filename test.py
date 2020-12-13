@@ -10,7 +10,7 @@ import cv2 as cv
 from util import cut_audio, get_arr_from_audio, save_wave_file, audio_interp
 from mfcc import mfcc_feature_pyramid
 
-from config import _AUDIO_CHANNELS, _AUDIO_DATA_WIDTH, _AUDIO_VALID_THRESHOLD, _AUDIO_FRAME_RATE, _BLOCKLEN, _SVM_IMAGE_HEIGHT, _SVM_IMAGE_WIDTH
+from config import _AUDIO_CHANNELS, _AUDIO_DATA_WIDTH, _AUDIO_VALID_THRESHOLD, _AUDIO_FRAME_RATE, _BLOCKLEN, _SVM_IMAGE_HEIGHT, _SVM_IMAGE_WIDTH, _AUDIO_MAX_GAP
 
 import os
 
@@ -38,24 +38,29 @@ block_buffer = []
 
 recording = True
 detected = False
+gap_time = 0
 
 def callback(in_data, frame_count, time_info, flag):
-    global block_buffer, detected, recording
+    global block_buffer, detected, recording, gap_time
     signal_block = np.frombuffer(in_data, dtype=np.int16)
+    # Record if the value is greater the what we defined
+    audio_valid = (np.max(signal_block)-np.min(signal_block)) > _AUDIO_VALID_THRESHOLD
 
-    signal_block = signal_block.astype(np.int32)
-    audio_valid = (np.max(signal_block) - np.min(signal_block)) > _AUDIO_VALID_THRESHOLD
-
+    
     
     if not detected and audio_valid:
         detected = True
-    if detected and not audio_valid:
+    if detected and gap_time < _AUDIO_MAX_GAP and not audio_valid:
+        gap_time = gap_time + 1
+    if detected and gap_time == _AUDIO_MAX_GAP and not audio_valid:
         detected = False
         recording = False
+        gap_time = 0
     if detected:
         block_buffer.append(signal_block)
 
     return(signal_block, pyaudio.paContinue)
+ 
 
 p = pyaudio.PyAudio()
 PA_FORMAT = p.get_format_from_width(_AUDIO_DATA_WIDTH)

@@ -11,7 +11,7 @@ import scipy.io.wavfile as wav
 
 from mfcc import mfcc_feature_pyramid
 
-from config import _IMAGE_HEIGHT, _IMAGE_WIDTH, _IMAGE_CHANNELS, _AUDIIO_CUT_THRESHOLD, _AUDIO_CHANNELS, _AUDIO_FRAME_RATE, _AUDIO_DATA_WIDTH, _EXTEND_NUM, _FILTER_ORDER, _LOW_PASS_CUTOFF, _SVM_IMAGE_HEIGHT, _SVM_IMAGE_WIDTH, _AUDIO_LENGTH, _AUDIO_DATA_MAX
+from config import _IMAGE_HEIGHT, _IMAGE_WIDTH, _IMAGE_CHANNELS, _AUDIO_CUT_THRESHOLD, _AUDIO_CHANNELS, _AUDIO_FRAME_RATE, _AUDIO_DATA_WIDTH, _EXTEND_NUM, _FILTER_ORDER, _LOW_PASS_CUTOFF, _SVM_IMAGE_HEIGHT, _SVM_IMAGE_WIDTH, _AUDIO_LENGTH, _AUDIO_DATA_MAX
 
 def get_wav_info(wav_file):
     wav = wave.open(wav_file, 'r')
@@ -82,7 +82,7 @@ def cut_audio(audio_data):
 
     for data in audio_data:
 
-        if data > _AUDIIO_CUT_THRESHOLD:
+        if data > _AUDIO_CUT_THRESHOLD:
             break
 
         startID = startID + 1
@@ -91,7 +91,7 @@ def cut_audio(audio_data):
     
     for data in reversed(audio_data):
 
-        if data > _AUDIIO_CUT_THRESHOLD:
+        if data > _AUDIO_CUT_THRESHOLD:
            break
 
         endID = endID - 1

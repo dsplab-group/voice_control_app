@@ -2,24 +2,13 @@ import pyaudio
 import os
 import time
 import cv2 as cv
-from config import _AUDIO_CHANNELS, _AUDIO_DATA_WIDTH, _AUDIO_VALID_THRESHOLD, _AUDIO_FRAME_RATE, _BLOCKLEN, _USE_FILTER
+from config import _AUDIO_CHANNELS, _AUDIO_DATA_WIDTH, _AUDIO_VALID_THRESHOLD, _AUDIO_FRAME_RATE, _BLOCKLEN, _USE_FILTER, _AUDIO_MAX_GAP
 from util import cut_audio, save_img_from_audio, butter_lowpass, save_wave_file
 from scipy.signal import lfilter
 import numpy as np
 
+from config import target_dict
 
-target_dict = {
-    '1': '1',
-    '2': '2',      
-    '3': '3',      
-    '4': '4',
-    '5': '5',
-    '6': '6',
-    '7': '7',
-    '8': '8',
-    'g': 'guitar',
-    'p': 'piano'
-}
 
 
 print('Please enter the png file dictionary (Default: sample_data/): ')
@@ -50,10 +39,11 @@ for class_name in target_dict.values():
 
 recording = False
 detected = False
+gap_time = 0
 block_buffer= []
 
 def callback(in_data, frame_count, time_info, flag):
-    global block_buffer, detected, recording
+    global block_buffer, detected, recording, gap_time
     signal_block = np.frombuffer(in_data, dtype=np.int16)
     # Record if the value is greater the what we defined
     audio_valid = (np.max(signal_block)-np.min(signal_block)) > _AUDIO_VALID_THRESHOLD
@@ -62,9 +52,12 @@ def callback(in_data, frame_count, time_info, flag):
     
     if not detected and audio_valid:
         detected = True
-    if detected and not audio_valid:
+    if detected and gap_time < _AUDIO_MAX_GAP and not audio_valid:
+        gap_time = gap_time + 1
+    if detected and gap_time == _AUDIO_MAX_GAP and not audio_valid:
         detected = False
         recording = False
+        gap_time = 0
     if detected:
         block_buffer.append(signal_block)
 

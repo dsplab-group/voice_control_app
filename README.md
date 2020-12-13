@@ -4,6 +4,12 @@ Create your own data by running record.py
 
 Train SVM on MFCC features of different window size to classify 0-8, guitar and piano.
 
+
+Run
+
+    python record.py
+
+to create your own dataset 
 Run
 
     python data_augmentation.py --create
@@ -12,5 +18,4 @@ to apply data augmentation.
 Run
 
     python data_augmentation.py --remove
-
-to remove all the augmented datas.
+to remove all the augmentation datas.

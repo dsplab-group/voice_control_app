@@ -11,7 +11,8 @@ _AUDIO_DATA_MAX = 2**15-1
 
 # Threshold
 _AUDIO_VALID_THRESHOLD = 8000
-_AUDIIO_CUT_THRESHOLD = 500
+_AUDIO_CUT_THRESHOLD = 500
+_AUDIO_MAX_GAP = 2
 
 # 
 _EXTEND_NUM = 800
@@ -40,7 +41,12 @@ target_dict = {
     '6': '6',
     '7': '7',
     '8': '8',
+    'b': 'begin',
+    'e': 'end',
     'g': 'guitar',
     'p': 'piano'
 }
 
+# Music
+_MUSIC_BLOCK_LEN = 128
+_GUITAR_RATE = 40000
